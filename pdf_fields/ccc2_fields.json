@@ -1,0 +1,160 @@
+{
+  "competition": [417,132],
+  "team_a_info": [320,153],
+  "team_b_info": [482,153],
+  "venue": [366,177],
+  "date": [315,198],
+  "time": [505,198],
+
+  "team_a_score name": [40,418],
+  "team_b_score name": [40,457],
+  "team_a_goals": [314,418],
+  "team_b_goals": [314,457],
+  "team_a_points": [415,418],
+  "team_b_points": [415,457],
+  "team_a_field time": [438,515],
+  "team_b_field time": [519,515],
+  "match_start_time": [510,531],
+
+
+  "team_a_player_on_1": [38,577],
+  "team_a_player_on_2": [38,590],
+  "team_a_player_on_3": [38,603],
+  "team_a_player_on_4": [38,616],
+  "team_a_player_on_5": [38,623],
+  "team_a_player_on_6": [38,636],
+
+  "team_a_player_off_1": [223,577],
+  "team_a_player_off_2": [223,590],
+  "team_a_player_off_3": [223,603],
+  "team_a_player_off_4": [223,616],
+  "team_a_player_off_5": [223,623],
+  "team_a_player_off_6": [223,636],
+
+  "team_a_club_1": [402,577],
+  "team_a_club_2": [402,590],
+  "team_a_club_3": [402,603],
+  "team_a_club_4": [402,616],
+  "team_a_club_5": [402,623],
+  "team_a_club_6": [402,636],
+
+
+  "team_b_player_on_1": [38,670],
+  "team_b_player_on_2": [38,683],
+  "team_b_player_on_3": [38,696],
+  "team_b_player_on_4": [38,709],
+  "team_b_player_on_5": [38,722],
+  "team_b_player_on_6": [38,735],
+
+  "team_b_player_off_1": [223,670],
+  "team_b_player_off_2": [223,683],
+  "team_b_player_off_3": [223,696],
+  "team_b_player_off_4": [223,709],
+  "team_b_player_off_5": [223,722],
+  "team_b_player_off_6": [223,735],
+
+  "team_b_club_1": [402,670],
+  "team_b_club_2": [402,683],
+  "team_b_club_3": [402,696],
+  "team_b_club_4": [402,709],
+  "team_b_club_5": [402,722],
+  "team_b_club_6": [402,670],
+
+
+  "injury_1": [91,54],
+  "injury_2": [91,68],
+  "injury_3": [91,83],
+  "injury_4": [91,96],
+  "injury_5": [91,110],
+  "injury_6": [91,125],
+
+
+  "red_card_player_1": [35,243],
+  "red_card_player_2": [35,255],
+  "red_card_player_3": [35,269],
+  "red_card_player_4": [35,280],
+  "red_card_player_5": [35,292],
+  "red_card_player_6": [35,305],
+
+  "red_card_club_1": [223,243],
+  "red_card_club_2": [223,255],
+  "red_card_club_3": [223,269],
+  "red_card_club_4": [223,280],
+  "red_card_club_5": [223,292],
+  "red_card_club_6": [223,305],
+
+  "red_card_infraction_1": [400,243],
+  "red_card_infraction_2": [400,255],
+  "red_card_infraction_3": [400,269],
+  "red_card_infraction_4": [400,280],
+  "red_card_infraction_5": [400,292],
+  "red_card_infraction_6": [400,305],
+
+
+  "double_card_player_1": [35,375],
+  "double_card_player_2": [35,387],
+  "double_card_player_3": [35,399],
+  "double_card_player_4": [35,412],
+  "double_card_player_5": [35,424],
+  "double_card_player_6": [35,436],
+
+  "double_card_club_1": [223,375],
+  "double_card_club_2": [223,387],
+  "double_card_club_3": [223,399],
+  "double_card_club_4": [223,412],
+  "double_card_club_5": [223,424],
+  "double_card_club_6": [223,436],
+
+  "double_card_infraction_1": [400,375],
+  "double_card_infraction_2": [400,387],
+  "double_card_infraction_3": [400,399],
+  "double_card_infraction_4": [400,412],
+  "double_card_infraction_5": [400,424],
+  "double_card_infraction_6": [400,436],
+
+
+  "black_card_player_1": [35,473],
+  "black_card_player_2": [35,487],
+  "black_card_player_3": [35,499],
+  "black_card_player_4": [35,510],
+  "black_card_player_5": [35,523],
+  "black_card_player_6": [35,534],
+
+  "black_card_club_1": [223,473],
+  "black_card_club_2": [223,487],
+  "black_card_club_3": [223,499],
+  "black_card_club_4": [223,510],
+  "black_card_club_5": [223,523],
+  "black_card_club_6": [223,534],
+
+  "black_card_infraction_1": [400,473],
+  "black_card_infraction_2": [400,487],
+  "black_card_infraction_3": [400,499],
+  "black_card_infraction_4": [400,510],
+  "black_card_infraction_5": [400,523],
+  "black_card_infraction_6": [400,534],
+
+
+  "yellow_card_player_1": [35,600],
+  "yellow_card_player_2": [35,612],
+  "yellow_card_player_3": [35,624],
+  "yellow_card_player_4": [35,636],
+  "yellow_card_player_5": [35,648],
+  "yellow_card_player_6": [35,660],
+
+  "yellow_card_club_1": [223,600],
+  "yellow_card_club_2": [223,612],
+  "yellow_card_club_3": [223,624],
+  "yellow_card_club_4": [223,636],
+  "yellow_card_club_5": [223,648],
+  "yellow_card_club_6": [223,660],
+
+  "yellow_card_infraction_1": [400,600],
+  "yellow_card_infraction_2": [400,612],
+  "yellow_card_infraction_3": [400,624],
+  "yellow_card_infraction_4": [400,636],
+  "yellow_card_infraction_5": [400,648],
+  "yellow_card_infraction_6": [400,660],
+
+  "sig_date": [442,809]
+}
