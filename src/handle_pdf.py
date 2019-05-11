@@ -123,7 +123,7 @@ def write_fields_to_temp_pdf(canvas_tmp, user_input, field_locations):
     canvas_tmp.save()
 
 
-def merge_pdf(report_template, tmp_pdf_filename, output_pdf_filename):
+def merge_pdf(report_template, tmp_pdf_filename):
     merged = PdfFileWriter()
 
     page = report_template.getPage(0)

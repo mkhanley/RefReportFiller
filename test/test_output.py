@@ -49,8 +49,7 @@ def create_user_input():
 
 import json
 with open("pdf_fields/ccc2_fields.json") as f:
-    data = json.load(f)
-    print(data)
+    field_points = json.load(f)
 
 from src.handle_pdf import write_fields_to_temp_pdf, merge_pdf, open_report_template, init_canvas
 
@@ -60,5 +59,5 @@ report_template = open_report_template('CCC2_Referees_Report.pdf')
 canvas_tmp = init_canvas(tmp_pdf_filename, report_template.getPage(0).mediaBox)
 
 
-write_fields_to_temp_pdf(canvas_tmp, create_user_input(), data)
-merged = merge_pdf(report_template, tmp_pdf_filename, 'build/test_output.pdf')
+write_fields_to_temp_pdf(canvas_tmp, create_user_input(), field_points)
+merged = merge_pdf(report_template, tmp_pdf_filename)
