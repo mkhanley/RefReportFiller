@@ -15,7 +15,7 @@ def create_user_input():
     user_input['team_b_field_time'] = '56:78'
     user_input['match_start_time'] = '00:00'
 
-    user_input['team_a_subs'] = [{'player)off': 'Player', 'Player_on': 'Swap'}]
+    user_input['team_a_subs'] = [{'player_off': 'Player', 'player_on': 'Swap'}]
     user_input['team_b_subs'] = [
         {'player_off': 'Player', 'player_on': '1'},
         {'player_off': 'Player', 'player_on': '2'},
@@ -52,5 +52,13 @@ with open("pdf_fields/ccc2_fields.json") as f:
     data = json.load(f)
     print(data)
 
-from src.fill_pdf import write_fields_to_temp_pdf
-write_fields_to_temp_pdf(create_user_input(), data)
+from src.handle_pdf import write_fields_to_temp_pdf, merge_pdf, open_report_template, init_canvas
+
+tmp_pdf_filename = 'build/tmp.pdf'
+
+report_template = open_report_template('CCC2_Referees_Report.pdf')
+canvas_tmp = init_canvas(tmp_pdf_filename, report_template.getPage(0).mediaBox)
+
+
+write_fields_to_temp_pdf(canvas_tmp, create_user_input(), data)
+merged = merge_pdf(report_template, tmp_pdf_filename, 'build/test_output.pdf')
