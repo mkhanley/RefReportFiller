@@ -1,16 +1,15 @@
 from reportlab.pdfgen import canvas
 from PyPDF2 import PdfFileWriter, PdfFileReader
+from datetime import date
 
-CANVAS_SIZE = 0
+CANVAS_HEIGHT = 0
 
 def init_canvas(tmp_pdf_filename, canvas_size):
-    c = canvas.Canvas(tmp_pdf_filename)
+    c = canvas.Canvas(tmp_pdf_filename, canvas_size)
     c.setPageSize(canvas_size)
-    # c.setPageSize((595, 841))
-    c.getAvailableFonts()
     c.setFont('Helvetica', 10)
-    global CANVAS_SIZE
-    CANVAS_SIZE = int(canvas_size[3])
+    global CANVAS_HEIGHT
+    CANVAS_HEIGHT = int(canvas_size[3])
     return c
 
 
@@ -19,7 +18,7 @@ def open_report_template(report_path):
 
 
 def field_to_xy(field_locations, field):
-    return field_locations[field][0], CANVAS_SIZE - field_locations[field][1]
+    return field_locations[field][0], CANVAS_HEIGHT - field_locations[field][1]
 
 
 def write_cards(canvas_tmp, field_locations, cards, card_type):
@@ -31,13 +30,13 @@ def write_cards(canvas_tmp, field_locations, cards, card_type):
 
         field_player = "{}_card_player_{}".format(card_type, i)
         field_club = "{}_card_club_{}".format(card_type, i)
-        field_infracton = "{}_card_infraction_{}".format(card_type, i)
+        field_infraction = "{}_card_infraction_{}".format(card_type, i)
 
         canvas_tmp.drawString(*field_to_xy(field_locations, field_player),
                               text=player)
         canvas_tmp.drawString(*field_to_xy(field_locations, field_club),
                               text=club)
-        canvas_tmp.drawString(*field_to_xy(field_locations, field_infracton),
+        canvas_tmp.drawString(*field_to_xy(field_locations, field_infraction),
                               text=infraction)
         i += 1
 
@@ -100,8 +99,7 @@ def write_fields_to_temp_pdf(canvas_tmp, user_input, field_locations):
     write_subs(canvas_tmp, field_locations, user_input['team_b_subs'],
                'b', user_input['team_b'])
 
-
-    canvas_tmp.showPage()  # Move to next page
+    move_to_next_canvas_page(canvas_tmp)
 
     i = 1
     for injury in user_input['injuries']:
@@ -115,28 +113,38 @@ def write_fields_to_temp_pdf(canvas_tmp, user_input, field_locations):
     write_cards(canvas_tmp, field_locations, user_input['yellow_cards'], 'yellow')
     write_cards(canvas_tmp, field_locations, user_input['black_cards'], 'black')
 
-    from datetime import date
-
     canvas_tmp.drawString(*field_to_xy(field_locations, "sig_date"),
                           text=str(date.today()))
 
-    canvas_tmp.save()
+
+def move_to_next_canvas_page(canvas_tmp):
+    canvas_tmp.showPage()
+
+
+def add_comment(canvas_tmp, comment):
+    move_to_next_canvas_page(canvas_tmp)
+    canvas_tmp.drawString(35, CANVAS_HEIGHT - 100, text=comment)
 
 
 def merge_pdf(report_template, tmp_pdf_filename):
     merged = PdfFileWriter()
 
-    page = report_template.getPage(0)
     watermark = PdfFileReader(open(tmp_pdf_filename, "rb"))
-    page.mergePage(watermark.getPage(0))
-    merged.addPage(page)
 
-    page = report_template.getPage(1)
-    page.mergePage(watermark.getPage(1))
-    merged.addPage(page)
+    template_pages = report_template.getNumPages()
+    watermark_pages = watermark.getNumPages()
+
+    for i in range(max(template_pages, watermark_pages)):
+        if i < template_pages:
+            page = report_template.getPage(i)
+            page.mergePage(watermark.getPage(i))
+            merged.addPage(page)
+
+        else:
+            merged.addPage(watermark.getPage(i))
     return merged
 
 
 def save_pdf(output, output_pdf_filename):
-    outputStream = open(output_pdf_filename, "wb")
-    output.write(outputStream)
+    output_stream = open(output_pdf_filename, "wb")
+    output.write(output_stream)

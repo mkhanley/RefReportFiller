@@ -1,3 +1,7 @@
+import json
+from src.handle_pdf import write_fields_to_temp_pdf, merge_pdf, open_report_template, init_canvas, save_pdf, add_comment
+
+
 def create_user_input():
     user_input = {}
     user_input['report_type_input'] = '2'
@@ -47,17 +51,18 @@ def create_user_input():
     user_input['yellow_cards'] = user_input['red_cards']
     return user_input
 
-import json
+
 with open("pdf_fields/ccc2_fields.json") as f:
     field_points = json.load(f)
 
-from src.handle_pdf import write_fields_to_temp_pdf, merge_pdf, open_report_template, init_canvas
-
 tmp_pdf_filename = 'build/tmp.pdf'
 
-report_template = open_report_template('CCC2_Referees_Report.pdf')
+report_template = open_report_template('templates/CCC2_Referees_Report.pdf')
 canvas_tmp = init_canvas(tmp_pdf_filename, report_template.getPage(0).mediaBox)
 
 
 write_fields_to_temp_pdf(canvas_tmp, create_user_input(), field_points)
+add_comment(canvas_tmp, "The quick brown fox jumps over the lazy dog")
+canvas_tmp.save()
 merged = merge_pdf(report_template, tmp_pdf_filename)
+save_pdf(merged, 'build/test_output.pdf')
