@@ -1,11 +1,12 @@
 from reportlab.pdfgen import canvas
-from PyPDF2 import PdfFileWriter, PdfFileReader
+from PyPDF2 import PdfFileWriter, PdfFileReader, filters
 from datetime import date
 
 CANVAS_HEIGHT = 0
 
+
 def init_canvas(tmp_pdf_filename, canvas_size):
-    c = canvas.Canvas(tmp_pdf_filename, canvas_size)
+    c = canvas.Canvas(tmp_pdf_filename, canvas_size, pageCompression=1)
     c.setPageSize(canvas_size)
     c.setFont('Helvetica', 10)
     global CANVAS_HEIGHT
@@ -126,6 +127,82 @@ def add_comment(canvas_tmp, comment):
     canvas_tmp.drawString(35, CANVAS_HEIGHT - 100, text=comment)
 
 
+def add_image(canvas_tmp, image_path):
+    move_to_next_canvas_page(canvas_tmp)
+    fill_page_with_image(image_path, canvas_tmp)
+
+
+def fill_page_with_image(path, canvas_tmp):
+    # https://gist.github.com/bradleyayers/1480017
+    """
+    Given the path to an image and a reportlab canvas, fill the current page
+    with the image.
+
+    This function takes into consideration EXIF orientation information (making
+    it compatible with photos taken from iOS devices).
+
+    This function makes use of ``canvas.setPageRotation()`` and
+    ``canvas.setPageSize()`` which will affect subsequent pages, so be sure to
+    reset them to appropriate values after calling this function.
+
+    :param   path: filesystem path to an image
+    :param canvas_tmp: ``reportlab.canvas.Canvas`` object
+    """
+    from PIL import Image
+
+    page_width_f, page_height_f = canvas_tmp._pagesize.upperRight
+    page_width = int(page_width_f)
+    page_height = int(page_height_f)
+
+    image = Image.open(path)
+    image_width, image_height = image.size
+    if hasattr(image, '_getexif'):
+        try:
+            orientation = image._getexif().get(274, 1)  # 274 = Orientation
+        except AttributeError:
+            orientation = 1
+    else:
+        orientation = 1
+
+    # These are the possible values for the Orientation EXIF attribute:
+    ORIENTATIONS = {
+        1: "Horizontal (normal)",
+        2: "Mirrored horizontal",
+        3: "Rotated 180",
+        4: "Mirrored vertical",
+        5: "Mirrored horizontal then rotated 90 CCW",
+        6: "Rotated 90 CW",
+        7: "Mirrored horizontal then rotated 90 CW",
+        8: "Rotated 90 CCW",
+    }
+    draw_width, draw_height = page_width, page_height
+    if orientation == 1:
+        canvas_tmp.setPageRotation(0)
+    elif orientation == 3:
+        canvas_tmp.setPageRotation(180)
+    elif orientation == 6:
+        image_width, image_height = image_height, image_width
+        draw_width, draw_height = page_height, page_width
+        canvas_tmp.setPageRotation(90)
+    elif orientation == 8:
+        image_width, image_height = image_height, image_width
+        draw_width, draw_height = page_height, page_width
+        canvas_tmp.setPageRotation(270)
+    else:
+        raise ValueError("Unsupported image orientation '%s'."
+                         % ORIENTATIONS[orientation])
+
+    if image_width > image_height:
+        page_width, page_height = page_height, page_width  # flip width/height
+        draw_width, draw_height = draw_height, draw_width
+        canvas_tmp.setPageSize((page_width, page_height))
+
+    image.save('build/tmp_image.jpg', quality=50)
+
+    canvas_tmp.drawImage('build/tmp_image.jpg', 0, 0, width=draw_width, height=draw_height,
+                         preserveAspectRatio=True)
+
+
 def merge_pdf(report_template, tmp_pdf_filename):
     merged = PdfFileWriter()
 
@@ -147,4 +224,6 @@ def merge_pdf(report_template, tmp_pdf_filename):
 
 def save_pdf(output, output_pdf_filename):
     output_stream = open(output_pdf_filename, "wb")
+
+
     output.write(output_stream)

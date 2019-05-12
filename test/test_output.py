@@ -1,5 +1,5 @@
 import json
-from src.handle_pdf import write_fields_to_temp_pdf, merge_pdf, open_report_template, init_canvas, save_pdf, add_comment
+from src.handle_pdf import write_fields_to_temp_pdf, merge_pdf, open_report_template, init_canvas, save_pdf, add_comment, add_image
 
 
 def create_user_input():
@@ -63,6 +63,10 @@ canvas_tmp = init_canvas(tmp_pdf_filename, report_template.getPage(0).mediaBox)
 
 write_fields_to_temp_pdf(canvas_tmp, create_user_input(), field_points)
 add_comment(canvas_tmp, "The quick brown fox jumps over the lazy dog")
+add_image(canvas_tmp, 'test/test_image.jpg')
+add_image(canvas_tmp, 'test/test_image.jpg')
+
+
 canvas_tmp.save()
 merged = merge_pdf(report_template, tmp_pdf_filename)
 save_pdf(merged, 'build/test_output.pdf')
