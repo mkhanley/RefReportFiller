@@ -1,6 +1,7 @@
 from reportlab.pdfgen import canvas
 from PyPDF2 import PdfFileWriter, PdfFileReader, filters
 from datetime import date
+from os import remove
 
 CANVAS_HEIGHT = 0
 
@@ -127,9 +128,13 @@ def add_comment(canvas_tmp, comment):
     canvas_tmp.drawString(35, CANVAS_HEIGHT - 100, text=comment)
 
 
-def add_image(canvas_tmp, image_path):
-    move_to_next_canvas_page(canvas_tmp)
-    fill_page_with_image(image_path, canvas_tmp)
+def add_image(canvas_tmp, image_path, team_name):
+    if image_path:
+        move_to_next_canvas_page(canvas_tmp)
+        fill_page_with_image(image_path, canvas_tmp)
+        remove('build/tmp_image.jpg')
+    else:
+        add_comment(canvas_tmp, "No teamsheet submitted for {}".format(team_name))
 
 
 def fill_page_with_image(path, canvas_tmp):
@@ -197,9 +202,9 @@ def fill_page_with_image(path, canvas_tmp):
         draw_width, draw_height = draw_height, draw_width
         canvas_tmp.setPageSize((page_width, page_height))
 
-    image.save('build/tmp_image.jpg', quality=50)
+    image.save('build/tmp_image.jpg', quality=10)
 
-    canvas_tmp.drawImage('build/tmp_image.jpg', 0, 0, width=draw_width, height=draw_height,
+    canvas_tmp.drawInlineImage('build/tmp_image.jpg', 0, 0, width=draw_width, height=draw_height,
                          preserveAspectRatio=True)
 
 
@@ -224,6 +229,4 @@ def merge_pdf(report_template, tmp_pdf_filename):
 
 def save_pdf(output, output_pdf_filename):
     output_stream = open(output_pdf_filename, "wb")
-
-
     output.write(output_stream)

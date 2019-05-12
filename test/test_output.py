@@ -1,15 +1,14 @@
-import json
-from src.handle_pdf import write_fields_to_temp_pdf, merge_pdf, open_report_template, init_canvas, save_pdf, add_comment, add_image
+import run
 
 
 def create_user_input():
     user_input = {}
-    user_input['report_type_input'] = '2'
+    user_input['report_type'] = '2'
     user_input['team_a'] = 'TeamA'
     user_input['team_b'] = 'TeamB'
     user_input['competition'] = 'Competition'
     user_input['venue'] = 'Venue'
-    user_input['date'] = '01/01/1970'
+    user_input['date'] = '01-01-1970'
     user_input['time'] = '00:00'
     user_input['team_a_goals'] = '1'
     user_input['team_a_points'] = '2'
@@ -49,24 +48,12 @@ def create_user_input():
     user_input['double_cards'] = user_input['red_cards']
     user_input['black_cards'] = user_input['red_cards']
     user_input['yellow_cards'] = user_input['red_cards']
+
+    user_input['team_a_teamsheet'] = 'test/test_image.jpg'
+    user_input['team_b_teamsheet'] = 'test/test_image.jpg'
+
+    user_input['comment'] = ''
     return user_input
 
 
-with open("pdf_fields/ccc2_fields.json") as f:
-    field_points = json.load(f)
-
-tmp_pdf_filename = 'build/tmp.pdf'
-
-report_template = open_report_template('templates/CCC2_Referees_Report.pdf')
-canvas_tmp = init_canvas(tmp_pdf_filename, report_template.getPage(0).mediaBox)
-
-
-write_fields_to_temp_pdf(canvas_tmp, create_user_input(), field_points)
-add_comment(canvas_tmp, "The quick brown fox jumps over the lazy dog")
-add_image(canvas_tmp, 'test/test_image.jpg')
-add_image(canvas_tmp, 'test/test_image.jpg')
-
-
-canvas_tmp.save()
-merged = merge_pdf(report_template, tmp_pdf_filename)
-save_pdf(merged, 'build/test_output.pdf')
+run.main(create_user_input())
